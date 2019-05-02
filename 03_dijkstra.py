@@ -12,7 +12,7 @@ nodeNumber = len(graph)     #lunghezza del grafo = numero di liste = numero di n
 labelList = [math.inf for i in range(nodeNumber)]       #tutti i nodi del grafo hanno distanza infinito per ora
 labelList[source] = 0       #distanza da source a se stesso = 0 -> [0,infinito,infinito,infinito]
 
-unexploredNodes = [i for i in range(nodeNumber)]        #lista da 0 a 3
+unexploredNodes = [i for i in range(nodeNumber)]        #nodi da esplorare
 
 #si parte dal nodo sorgente perchè ha sempre la label più piccola di tutti = 0
 while len(unexploredNodes)>0:
