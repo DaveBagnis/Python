@@ -1,40 +1,39 @@
-import math
+import math     #importiamo libreria math per l'infinito
 
-graph = [[0, 1, 4, 0, 0, 0, 0, 0],
-         [1, 0, 0, 0, 0, 2, 0, 0],
-         [4, 0, 0, 5, 0, 0, 0, 0],
-         [0, 0, 5, 0, 1, 3, 0, 0],
-         [0, 0, 0, 1, 0, 0, 2, 3],
-         [0, 2, 0, 3, 0, 0, 0, 0],
-         [0, 0, 0, 0, 2, 0, 0, 4],
-         [0, 0, 0, 0, 3, 0, 4, 0]]
+graph = [
+    [0,3,0,4],      #matrice di adiacenza con 4 nodi pesati
+    [3,0,1,5],
+    [0,1,0,2],
+    [4,5,2,0]]
 
-labelList = [math.inf] * len(graph)  # inizializzazione delle label (moltiplico per il numero di nodi per le righe)
-labelList[0] = 0  # distanza dal nodo sorgente = 0
+source = 0
+nodeNumber = len(graph)     #lunghezza del grafo = numero di liste = numero di nodi = 4
 
-unexploredNode = [0, 1, 2, 3, 4, 5, 6, 7]  # nodi da esplorare
+labelList = [math.inf for i in range(nodeNumber)]       #tutti i nodi del grafo hanno distanza infinito per ora
+labelList[source] = 0       #distanza da source a se stesso = 0 -> [0,infinito,infinito,infinito]
 
-tempLabel = 0
+unexploredNodes = [i for i in range(nodeNumber)]        #lista da 0 a 3
 
-while len(unexploredNode) > 0:
-    print(labelList)
-    # scelgo il nodo con label minore(k)
-    tempList = [math.inf] * len(graph)
-    for i in unexploredNode:
-        tempList[i] = labelList[i]  # valore della labelList[i]
+#si parte dal nodo sorgente perchè ha sempre la label più piccola di tutti = 0
+while len(unexploredNodes)>0:
+    
+    print(unexploredNodes)
 
-    minimun = min(tempList)  # trovo il minimo
+    minLabel = min([labelList[node] for node in unexploredNodes])       #minLabel = il valore minimo di quelli che ci sono nella lista dei nodi non esplorati, al primo giro è 0 cioè quella di source
 
-    if (minimun == math.inf):  # controllo per uscire dal ciclo
-        break
+    for i in unexploredNodes:
+        if labelList[i] == minLabel:
+            currentNode = i
+        else:
+            break
 
-    indexMin = tempList.index(minimun)  # prendo l'indice del valore minimo
-    tempLabel += labelList[indexMin]  # sommo per sapere il percorso fatto finora
+    print(currentNode)
+    unexploredNodes.remove(currentNode)     #togliere il nodo esplorato dalla lista dei nodi non esplorati (gli passiamo l'indice del nodo corrente)
 
-    for j in unexploredNode:  # ciclo for con ricerca dei nodi collegati a k per indici non ancora esplorati
-        if (graph[indexMin][j] != 0):  # verifico che sia collegato e che non sia se stesso
-            if (labelList[j] > tempLabel + graph[indexMin][j]):
-                labelList[j] = tempLabel + graph[indexMin][
-                    j]  # per ogni nuovo nodo sommo (valore label(k)+peso arco di quel nodo) il valore della sua label e controllo se sono minori così sostituisco sennò niente
+    for neighbourNode,weight in enumerate(graph[currentNode]):      #cicliamo sulla riga del current node del grafo
+        if weight>0:
+            distance = labelList[currentNode]+weight        #distance = distanza del nodo corrente + il peso
+            if(distance<labelList[neighbourNode]):      #se la distanza < del peso del nodo vicino
+                labelList[neighbourNode]=distance       #distanza del nodo vicino = distance
 
-    unexploredNode.remove(indexMin)  # rimuovo l'indice visitato    
+print(labelList)  
